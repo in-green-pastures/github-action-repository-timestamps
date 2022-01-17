@@ -1,0 +1,27 @@
+name: Test
+
+on: push
+
+jobs:
+  creation-disabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: given
+        uses: actions/checkout@v2
+      - name: when
+        id: when
+        uses: ./
+        with:
+          creation-enabled: 'false'
+      - name: then
+        run: echo timestamp ${{ steps.when.outputs.timestamp }}
+  creation-enabled:
+    runs-on: ubuntu-latest
+    steps:
+      - name: given
+        uses: actions/checkout@v2
+      - name: when
+        id: when
+        uses: ./
+      - name: then
+        run: echo timestamp ${{ steps.when.outputs.timestamp }}

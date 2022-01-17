@@ -1,0 +1,26 @@
+author: 'Tomasz Krzysztof Zieleniewski'
+branding:
+  icon: 'calendar'
+  color: 'blue'
+description: "Timestamps"
+name: "Timestamps"
+
+inputs:
+  creation-enabled:
+    description: 'Whether or not to determine the creation timestamp'
+    default: 'true'
+    required: false
+
+outputs:
+  creation-timestamp:
+    description: 'Creation timestamp'
+    value: ${{ steps.creation.outputs.timestamp }}
+
+runs:
+  using: composite
+  steps:
+    - id: creation
+      if: inputs.creation-enabled == 'true'
+      run: |
+        echo "::set-output name=timestamp::$(echo `date`)"
+      shell: bash
