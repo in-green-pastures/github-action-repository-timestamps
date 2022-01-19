@@ -2,25 +2,34 @@ author: 'Tomasz Krzysztof Zieleniewski'
 branding:
   icon: 'calendar'
   color: 'blue'
-description: "Timestamps"
-name: "Timestamps"
+description: "Repository dates"
+name: "Repository dates"
 
 inputs:
-  creation-enabled:
-    description: 'Whether or not to determine the creation timestamp'
+  created-at-enabled:
+    description: 'Whether or not to determine the created at date'
     default: 'true'
     required: false
+  github-token:
+    description: "A GitHub token used for making requests to Github's API"
+    default: ${{ secrets.GITHUB_TOKEN }}
 
 outputs:
-  creation-timestamp:
-    description: 'Creation timestamp'
-    value: ${{ steps.creation.outputs.timestamp }}
+  created-at:
+    description: 'Created at date'
+    value: ${{ steps.created-at.outputs.date }}
 
 runs:
   using: composite
   steps:
-    - id: creation
-      if: inputs.creation-enabled == 'true'
+    - id: created-at
+      if: inputs.created-at-enabled == 'true'
       run: |
-        echo "::set-output name=timestamp::$(echo `date`)"
+        env
+        REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-dates)
+        echo repository ${REPOSITORY_URL}
+        CREATED_AT=$(curl ${REPOSITORY_URL} \
+        -H "Authorization: token ${{ inputs.github-token }}" | jq -r .created_at)
+        echo date ${CREATED_AT}
+        echo "::set-output name=date::${CREATED_AT}"
       shell: bash

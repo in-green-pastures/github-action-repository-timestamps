@@ -4,7 +4,7 @@ on: push
 
 jobs:
   creation-disabled:
-    name: Does not set creation timestamp when disabled
+    name: Does not set created-at date when disabled
     runs-on: ubuntu-latest
     steps:
       - name: given
@@ -13,13 +13,14 @@ jobs:
         id: when
         uses: ./
         with:
-          creation-enabled: 'false'
+          created-at-enabled: 'false'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: then
-        if: steps.when.outputs.creation-timestamp != ''
+        if: steps.when.outputs.created-at != ''
         run: exit 1
         continue-on-error: true
   creation-enabled:
-    name: Sets creation timestamp by default
+    name: Sets created-at date by default
     runs-on: ubuntu-latest
     steps:
       - name: given
@@ -27,7 +28,9 @@ jobs:
       - name: when
         id: when
         uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: then
-        if: steps.when.outputs.creation-timestamp == ''
+        if: steps.when.outputs.created-at == ''
         run: exit 1
         continue-on-error: true
