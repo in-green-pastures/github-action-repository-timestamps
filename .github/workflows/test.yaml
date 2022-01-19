@@ -14,7 +14,7 @@ jobs:
         with:
           creation-enabled: 'false'
       - name: then
-        run: echo timestamp ${{ steps.when.outputs.timestamp }}
+        run: echo timestamp ${{ steps.when.outputs.creation-timestamp }}
   creation-enabled:
     runs-on: ubuntu-latest
     steps:
@@ -24,4 +24,4 @@ jobs:
         id: when
         uses: ./
       - name: then
-        run: echo timestamp ${{ steps.when.outputs.timestamp }}
+        run: echo timestamp ${{ steps.when.outputs.creation-timestamp }}
