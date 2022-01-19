@@ -4,6 +4,7 @@ on: push
 
 jobs:
   creation-disabled:
+    name: Does not set creation timestamp when disabled
     runs-on: ubuntu-latest
     steps:
       - name: given
@@ -14,8 +15,11 @@ jobs:
         with:
           creation-enabled: 'false'
       - name: then
-        run: echo timestamp ${{ steps.when.outputs.creation-timestamp }}
+        if: steps.when.outputs.creation-timestamp != ''
+        run: exit 1
+        continue-on-error: true
   creation-enabled:
+    name: Sets creation timestamp by default
     runs-on: ubuntu-latest
     steps:
       - name: given
@@ -24,4 +28,6 @@ jobs:
         id: when
         uses: ./
       - name: then
-        run: echo timestamp ${{ steps.when.outputs.creation-timestamp }}
+        if: steps.when.outputs.creation-timestamp == ''
+        run: exit 1
+        continue-on-error: true
