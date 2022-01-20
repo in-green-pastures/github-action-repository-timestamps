@@ -37,17 +37,17 @@ runs:
         echo "::debug::Created at date ${CREATED_AT_DATE}"
         CREATED_AT_TIMESTAMP=$(date -d "${CREATED_AT_DATE}" +%s)
         echo "::debug::Created at timestamp ${CREATED_AT_TIMESTAMP}"
-        echo "::set-output name=timestamp::${CREATED_AT_TIMESTAMP}"
+        echo "::set-output name=created-at::${CREATED_AT_TIMESTAMP}"
 
         PUSHED_AT_DATE=$(echo ${DATES} | jq -r .[1])
         echo "::debug::Pushed at date ${PUSHED_AT_DATE}"
         PUSHED_AT_TIMESTAMP=$(date -d "${PUSHED_AT_DATE}" +%s)
         echo "::debug::Pushed at timestamp ${PUSHED_AT_TIMESTAMP}"
-        echo "::set-output name=timestamp::${PUSHED_AT_TIMESTAMP}"
+        echo "::set-output name=pushed-at::${PUSHED_AT_TIMESTAMP}"
 
         UPDATED_AT_DATE=$(echo ${DATES} | jq -r .[2])
         echo "::debug::Updated at date ${UPDATED_AT_DATE}"
         UPDATED_AT_TIMESTAMP=$(date -d "${UPDATED_AT_DATE}" +%s)
         echo "::debug::Updated at timestamp ${UPDATED_AT_TIMESTAMP}"
-        echo "::set-output name=timestamp::${UPDATED_AT_TIMESTAMP}"
+        echo "::set-output name=updated-at::${UPDATED_AT_TIMESTAMP}"
       shell: bash
