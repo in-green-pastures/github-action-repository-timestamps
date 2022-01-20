@@ -1,0 +1,32 @@
+name: Test
+
+on: push
+
+jobs:
+  outputs-timestamps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: given
+        uses: actions/checkout@v2
+      - name: when
+        id: when
+        uses: ./
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: then created as timestamp is not empty
+        if: steps.when.outputs.created-at == ''
+        run: |
+          echo "::error::Created at timestamp must not be empty"
+          exit 1
+        continue-on-error: true
+      - name: then pushed at as timestamp is not empty
+        if: steps.when.outputs.pushed-at == ''
+        run: |
+          echo "::error::Pushed at timestamp must not be empty"
+          exit 1
+        continue-on-error: true
+      - name: then updated at timestamp is not empty
+        if: steps.when.outputs.updated-at == ''
+        run: |
+          echo "::error::Updated at timestamp must not be empty"
+          exit 1
