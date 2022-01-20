@@ -12,7 +12,7 @@ inputs:
     required: false
   github-token:
     description: "A GitHub token used for making requests to Github's API"
-    default: ${{ secrets.GITHUB_TOKEN }}
+    default: ${{ github.token }}
 
 outputs:
   created-at:
@@ -29,7 +29,7 @@ runs:
         REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-dates)
         echo repository ${REPOSITORY_URL}
         CREATED_AT=$(curl ${REPOSITORY_URL} \
-        -H "Authorization: token ${{ inputs.github-token }}" | jq -r .created_at)
+        -H "Authorization: token ${{ github.token }}" | jq -r .created_at)
         echo date ${CREATED_AT}
         echo "::set-output name=date::${CREATED_AT}"
       shell: bash
