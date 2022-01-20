@@ -2,34 +2,37 @@ author: 'Tomasz Krzysztof Zieleniewski'
 branding:
   icon: 'calendar'
   color: 'blue'
-description: "Repository dates"
-name: "Repository dates"
+description: "Repository timestamps - created at, pushed at and updated at."
+name: "Repository Timestamps"
 
 inputs:
-  created-at-enabled:
-    description: 'Whether or not to determine the created at date'
-    default: 'true'
-    required: false
   github-token:
-    description: "A GitHub token used for making requests to Github's API"
     default: ${{ github.token }}
+    description: 'A GitHub token used for making requests to GitHub APIs'
+    required: false
 
 outputs:
   created-at:
-    description: 'Created at date'
+    description: 'Created at timestamp'
     value: ${{ steps.created-at.outputs.date }}
+  pushed-at:
+    description: 'Pushed at timestamp'
+    value: ${{ steps.pushed-at.outputs.date }}
+  updated-at:
+    description: 'Updated at timestamp'
+    value: ${{ steps.updated-at.outputs.date }}
 
 runs:
   using: composite
   steps:
     - id: created-at
-      if: inputs.created-at-enabled == 'true'
       run: |
-        env
+        echo "::group::Repository Timestamps"
         REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-dates)
-        echo repository ${REPOSITORY_URL}
+        echo "::debug::Fetching repository resource from ${REPOSITORY_URL}"
         CREATED_AT=$(curl ${REPOSITORY_URL} \
         -H "Authorization: token ${{ github.token }}" | jq -r .created_at)
         echo date ${CREATED_AT}
         echo "::set-output name=date::${CREATED_AT}"
+        echo "::endgroup::"
       shell: bash
