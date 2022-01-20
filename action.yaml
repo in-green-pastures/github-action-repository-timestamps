@@ -2,7 +2,7 @@ author: 'Tomasz Krzysztof Zieleniewski'
 branding:
   icon: 'calendar'
   color: 'blue'
-description: "Repository timestamps - created at, pushed at and updated at."
+description: "Output repository timestamps - created at, pushed at and updated at."
 name: "Repository Timestamps"
 
 inputs:
