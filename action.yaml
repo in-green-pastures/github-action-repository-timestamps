@@ -14,47 +14,38 @@ inputs:
 outputs:
   created-at:
     description: 'Created at timestamp'
-    value: ${{ steps.created-at.outputs.timestamp }}
+    value: ${{ steps.timestamps.outputs.created-at }}
   pushed-at:
     description: 'Pushed at timestamp'
-    value: ${{ steps.pushed-at.outputs.timestamps }}
+    value: ${{ steps.timestamps.outputs.pushed-at }}
   updated-at:
     description: 'Updated at timestamp'
-    value: ${{ steps.updated-at.outputs.timestamps }}
+    value: ${{ steps.timestamps.outputs.updated-at }}
 
 runs:
   using: composite
   steps:
-    - id: repository
+    - id: timestamps
       run: |
         REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-timestamps)
         echo "::debug::Fetching repository resource from ${REPOSITORY_URL}"
         DATES=$(curl ${REPOSITORY_URL} \
         -H "Authorization: token ${{ github.token }}" | jq "[.created_at, .pushed_at, .updated_at]")
         echo "::debug::Repository dates ${DATES}"
-        echo "::set-output name=dates::${DATES}"
-      shell: bash
-    - id: created-at
-      run: |
-        echo dates -- ${{ steps.repository.outputs.dates }}
-        echo $DATES
-        CREATED_AT_DATE=$(echo ${{ steps.repository.outputs.dates }} | jq -r .[0])
+
+        CREATED_AT_DATE=$(echo ${DATES} | jq -r .[0])
         echo "::debug::Created at date ${CREATED_AT_DATE}"
         CREATED_AT_TIMESTAMP=$(date -d "${CREATED_AT_DATE}" +%s)
         echo "::debug::Created at timestamp ${CREATED_AT_TIMESTAMP}"
         echo "::set-output name=timestamp::${CREATED_AT_TIMESTAMP}"
-      shell: bash
-    - id: pushed-at
-      run: |
-        PUSHED_AT_DATE=$(echo ${{ steps.repository.outputs.dates }} | jq -r .[1])
+
+        PUSHED_AT_DATE=$(echo ${DATES} | jq -r .[1])
         echo "::debug::Pushed at date ${PUSHED_AT_DATE}"
         PUSHED_AT_TIMESTAMP=$(date -d "${PUSHED_AT_DATE}" +%s)
         echo "::debug::Pushed at timestamp ${PUSHED_AT_TIMESTAMP}"
         echo "::set-output name=timestamp::${PUSHED_AT_TIMESTAMP}"
-      shell: bash
-    - id: updated-at
-      run: |
-        UPDATED_AT_DATE=$(echo ${{ steps.repository.outputs.dates }} | jq -r .[2])
+
+        UPDATED_AT_DATE=$(echo ${DATES} | jq -r .[2])
         echo "::debug::Updated at date ${UPDATED_AT_DATE}"
         UPDATED_AT_TIMESTAMP=$(date -d "${UPDATED_AT_DATE}" +%s)
         echo "::debug::Updated at timestamp ${UPDATED_AT_TIMESTAMP}"
