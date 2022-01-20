@@ -27,7 +27,7 @@ runs:
   steps:
     - id: repository
       run: |
-        REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-dates)
+        REPOSITORY_URL=$(echo ${GITHUB_API_URL}/repos/tzieleniewski/github-action-repository-timestamps)
         echo "::debug::Fetching repository resource from ${REPOSITORY_URL}"
         DATES=$(curl ${REPOSITORY_URL} \
         -H "Authorization: token ${{ github.token }}" | jq "[.created_at, .pushed_at, .updated_at]")
@@ -35,7 +35,9 @@ runs:
         echo "::set-output name=dates::${DATES}"
       shell: bash
     - id: created-at
-      run: |  
+      run: |
+        echo dates -- ${{ steps.repository.outputs.dates }}
+        echo $DATES
         CREATED_AT_DATE=$(echo ${{ steps.repository.outputs.dates }} | jq -r .[0])
         echo "::debug::Created at date ${CREATED_AT_DATE}"
         CREATED_AT_TIMESTAMP=$(date -d "${CREATED_AT_DATE}" +%s)
