@@ -3,24 +3,6 @@ name: Test
 on: push
 
 jobs:
-  creation-disabled:
-    name: Does not set created-at date when disabled
-    runs-on: ubuntu-latest
-    steps:
-      - name: given
-        uses: actions/checkout@v2
-      - name: when
-        id: when
-        uses: ./
-        with:
-          created-at-enabled: 'false'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-      - name: then
-        if: steps.when.outputs.created-at != ''
-        run: |
-          echo "::error::Timestamp should be empty" 
-          exit 1
-        continue-on-error: true
   creation-enabled:
     name: Sets created-at date by default
     runs-on: ubuntu-latest
@@ -37,4 +19,3 @@ jobs:
         run: |
           echo "::error::Timestamp should not be empty"
           exit 1
-        continue-on-error: true
