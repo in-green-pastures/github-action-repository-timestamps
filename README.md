@@ -4,7 +4,7 @@
 
 # Repository Timestamps
 
-Action outputs repository timestamps fetched from the repository resource.
+Outputs repository timestamps - created at, pushed at and updated at.
 
 ## Usage
 
