@@ -2,6 +2,7 @@ name: Versions update
 
 on:
   release:
+    types: [edited, published]
 
 jobs:
   actions-tagger:
